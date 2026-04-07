@@ -35,7 +35,7 @@ class DocumentRequest extends FormRequest
             'document_type'  => 'nullable|string|max:200',
             'issue_date'     => 'required|date',
             'effect_date'    => 'required|date|after_or_equal:issue_date',
-            'encoded_by'     => 'required|string|max:200',
+            'encoded_by'     => 'required|integer|exists:users,id',
 
         ];
     }

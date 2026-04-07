@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Documents extends Model
 {
     use SoftDeletes;
-    
+     protected $table = 'tbl_documents'; // 👈 add this
     protected $fillable = [
         'title',
         'subject',

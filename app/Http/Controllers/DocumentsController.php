@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DocumentRequest;
 use App\Models\Documents;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -27,17 +28,7 @@ class DocumentsController extends Controller
                 'message' => 'Validation failed.',
                 'errors'  => $e->errors()
             ], 422);
-        }
-        // catch (ModelNotFoundException $e) {
-        //     // Handles ::findOrFail() / ::firstOrFail() when record not found
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Record not found.',
-        //         'error'   => $e->getMessage()
-        //     ], 404);
-
-        // }
-        catch (NotFoundHttpException $e) {
+        } catch (NotFoundHttpException $e) {
             // Handles route not found (404)
             return response()->json([
                 'success' => false,
@@ -76,22 +67,32 @@ class DocumentsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(DocumentRequest $request)
     {
         //
 
-         try {
+        try {
             //code...
+
+            $duplicate = Documents::where('title', $request->validated()['title'])->first();
+
+            if ($duplicate) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'A document with the same title already exists.',
+                    'data'    => $duplicate
+                ], 409); // 409 Conflict
+            }
+
+            $docs = Documents::create($request->validated());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Document created successfully.',
+                'data'    => $docs
+            ], 201);
         } catch (ValidationException $e) {
             // Handles failed $request->validate() rules
             return response()->json([
@@ -153,7 +154,7 @@ class DocumentsController extends Controller
     public function show(Documents $documents)
     {
         //
-         try {
+        try {
             //code...
         } catch (ValidationException $e) {
             // Handles failed $request->validate() rules
@@ -224,7 +225,7 @@ class DocumentsController extends Controller
     public function update(Request $request, Documents $documents)
     {
         //
-         try {
+        try {
             //code...
         } catch (ValidationException $e) {
             // Handles failed $request->validate() rules
@@ -287,7 +288,7 @@ class DocumentsController extends Controller
     public function destroy(Documents $documents)
     {
         //
-         try {
+        try {
             //code...
         } catch (ValidationException $e) {
             // Handles failed $request->validate() rules
