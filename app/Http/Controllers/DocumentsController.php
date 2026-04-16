@@ -66,6 +66,115 @@ class DocumentsController extends Controller
         }
     }
 
+       public function incoming(Request $request)
+    {
+        //
+            $outgoing = $request->validate([
+            'office' => 'required,',
+            'document_type' => 'required',
+        ]);
+
+        try {
+            //code...
+        } catch (ValidationException $e) {
+            // Handles failed $request->validate() rules
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors'  => $e->errors()
+            ], 422);
+        } catch (NotFoundHttpException $e) {
+            // Handles route not found (404)
+            return response()->json([
+                'success' => false,
+                'message' => 'The requested resource was not found.',
+                'error'   => $e->getMessage()
+            ], 404);
+        } catch (QueryException $e) {
+            // Handles DB errors (syntax, constraint violations, connection issues)
+            Log::error('Database query error', [
+                'message' => $e->getMessage(),
+                'code'    => $e->getCode()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'A database error occurred.',
+                'error'   => $e->getMessage()
+            ], 500);
+        } catch (HttpException $e) {
+            // Handles abort() calls like abort(403), abort(401), etc.
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], $e->getStatusCode());
+        } catch (\Exception $e) {
+            // Catch-all for any unexpected exceptions
+            Log::error('Unexpected error', [
+                'message' => $e->getMessage(),
+                'trace'   => $e->getTraceAsString()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+     public function outgoing(Request $request)
+    {
+        //
+        $outgoing = $request->validate([
+            'office' => 'required,',
+            'document_type' => 'required',
+        ]);
+        try {
+            //code...
+        } catch (ValidationException $e) {
+            // Handles failed $request->validate() rules
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors'  => $e->errors()
+            ], 422);
+        } catch (NotFoundHttpException $e) {
+            // Handles route not found (404)
+            return response()->json([
+                'success' => false,
+                'message' => 'The requested resource was not found.',
+                'error'   => $e->getMessage()
+            ], 404);
+        } catch (QueryException $e) {
+            // Handles DB errors (syntax, constraint violations, connection issues)
+            Log::error('Database query error', [
+                'message' => $e->getMessage(),
+                'code'    => $e->getCode()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'A database error occurred.',
+                'error'   => $e->getMessage()
+            ], 500);
+        } catch (HttpException $e) {
+            // Handles abort() calls like abort(403), abort(401), etc.
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], $e->getStatusCode());
+        } catch (\Exception $e) {
+            // Catch-all for any unexpected exceptions
+            Log::error('Unexpected error', [
+                'message' => $e->getMessage(),
+                'trace'   => $e->getTraceAsString()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */

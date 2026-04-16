@@ -16,16 +16,18 @@ Route::prefix('/user')->group(function () {
 });
 
 Route::prefix('/library/document')->group(function () {
-    Route::get('/list',[LibDocumentsController::class, 'index']);
-    Route::get('/{id}',[LibDocumentsController::class, 'show']);
-    Route::post('/new',[LibDocumentsController::class, 'store']);
-    Route::put('/{id}',[LibDocumentsController::class, 'update']);
-    Route::delete('/remove/{id}',[LibDocumentsController::class, 'destroy']);
+    Route::get('/list', [LibDocumentsController::class, 'index']);
+    Route::get('/{id}', [LibDocumentsController::class, 'show']);
+    Route::post('/new', [LibDocumentsController::class, 'store']);
+    Route::put('/{id}', [LibDocumentsController::class, 'update']);
+    Route::delete('/remove/{id}', [LibDocumentsController::class, 'destroy']);
 });
 
 
 Route::prefix('/documents')->group(function () {
     Route::get('/list', [DocumentsController::class, 'index']);
+    Route::get('/incoming', [DocumentsController::class, 'incoming']);
+    Route::get('/outgoing', [DocumentsController::class, 'outgoing']);
     Route::get('/{id}', [DocumentsController::class, 'show']);
     Route::post('/new', [DocumentsController::class, 'store']);
     Route::put('/{id}', [DocumentsController::class, 'update']);
